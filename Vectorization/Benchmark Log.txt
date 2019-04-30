@@ -1,0 +1,56 @@
+Magnitude Computation
+Set 1: size = 10
+Test 1 complete [linear] :  0.0007732209996902384
+Test 2 complete [linear optimzed] :  0.0005443869995360728
+Test 3 complete [vectorized] :  0.0002654669997355086
+Test 4 complete [gpu] :  0.14610526999967988
+Set 2: size = 20
+Test 1 complete [linear] :  0.0034756510003717267
+Test 2 complete [linear optimzed] :  0.002380228999754763
+Test 3 complete [vectorized] :  0.0011430129998188931
+Test 4 complete [gpu] :  0.021124988000337908
+Set 3: size = 50
+Test 1 complete [linear] :  0.021750281999629806
+Test 2 complete [linear optimzed] :  0.014322240999717906
+Test 3 complete [vectorized] :  0.00689699600025051
+Test 4 complete [gpu] :  0.05537736400037829
+Set 4: size = 100
+Test 1 complete [linear] :  0.08693136199963192
+Test 2 complete [linear optimzed] :  0.05724120699960622
+Test 3 complete [vectorized] :  0.027525286999662057
+Test 4 complete [gpu] :  0.12462202200003958
+Set 5: size = 200
+Test 1 complete [linear] :  0.34965009600000485
+Test 2 complete [linear optimzed] :  0.22704258999965532
+Test 3 complete [vectorized] :  0.11211725799967098
+Test 4 complete [gpu] :  0.30541701299989654
+Set 6: size = 500
+Test 1 complete [linear] :  2.1785800320003545
+Test 2 complete [linear optimzed] :  1.4178114389997063
+Test 3 complete [vectorized] :  0.7416642910002338
+Test 4 complete [gpu] :  1.2330408299994815
+Set 7: size = 1000
+Test 1 complete [linear] :  8.563711673000398
+Test 2 complete [linear optimzed] :  5.62979516499945
+Test 3 complete [vectorized] :  3.472315541000171
+Test 4 complete [gpu] :  4.77873158500006
+Set 8: size = 2000
+Test 1 complete [linear] :  34.41333838999981
+Test 2 complete [linear optimzed] :  22.552097220999713
+Test 3 complete [vectorized] :  20.718097852999563
+Test 4 complete [gpu] :  23.06185636600003
+Set 9: size = 3000
+Test 1 complete [linear] :  76.88462777399945
+Test 2 complete [linear optimzed] :  50.27399520400013
+Test 3 complete [vectorized] :  87.90049257400005
+Test 4 complete [gpu] :  91.98718075499983
+Set 10: size = 4000
+Test 1 complete [linear] :  136.7853896000006
+Test 2 complete [linear optimzed] :  89.26659643099993
+Test 3 complete [vectorized] :  195.2480895690005
+Test 4 complete [gpu] :  200.94054402300026
+Set 11: size = 5000
+Test 1 complete [linear] :  214.86603736899997
+Test 2 complete [linear optimzed] :  140.2059832820005
+Test 3 complete [vectorized] :  364.42673880000075
+Test 4 complete [gpu] :  371.95196117900014
