@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		BCAAF82F227915F0006FEB03 /* benchmark_alpha.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = benchmark_alpha.py; sourceTree = "<group>"; };
 		BCFDB2C422788E50006911A6 /* main.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
 		BCFDB2CB22789181006911A6 /* Vectorization_Benchmark.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = Vectorization_Benchmark.py; sourceTree = "<group>"; };
 		BCFDB2CC2278918A006911A6 /* main_alpha.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = main_alpha.py; sourceTree = "<group>"; };
-		BCFDB2CD2278918A006911A6 /* main_benchmark.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = main_benchmark.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -26,8 +26,8 @@
 		BCFDB2C522788FB5006911A6 /* Versions */ = {
 			isa = PBXGroup;
 			children = (
+				BCAAF82F227915F0006FEB03 /* benchmark_alpha.py */,
 				BCFDB2CC2278918A006911A6 /* main_alpha.py */,
-				BCFDB2CD2278918A006911A6 /* main_benchmark.py */,
 			);
 			path = Versions;
 			sourceTree = "<group>";
