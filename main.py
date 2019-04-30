@@ -1,4 +1,4 @@
-#main_beta.py
+#main.py
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,7 +22,7 @@ x_max = 10 #container boundary
 x_min = -10
 y_max = 10
 y_min = -10
-tick = 0.1 #time scale
+tick = 0.01 #time scale
 epoch = 0 #time until next collision
 #resolution = 20 #resolution of distribution graph
 
@@ -31,10 +31,8 @@ epoch = 0 #time until next collision
 r = np.zeros((size,2))
 r_next = np.zeros((size,2))
 rij = np.zeros(((size,size,2)))
-rij_mag = np.zeros((size,size))
-r2ij = np.zeros((size,size))
+rij_mag2 = np.zeros((size,size))
 v = np.zeros((size,2))
-v_mag = np.zeros(size)
 vij = np.zeros(((size,size,2)))
 vij_mag = np.zeros((size,size))
 rvij = np.zeros((size,size))
@@ -46,6 +44,8 @@ y_collision = 0
 particle_collision = 0
 index_1 = 0
 index_2 = -1
+
+KE = 0
 
 #initialization
 for i in range(size):
@@ -76,6 +76,7 @@ def refresh(frame):
 	global r
 	global r_next
 	global v
+	
 #progress-------------------------------------
 	for i in range(size):
 		r_next[i] = r[i] + v[i] * tick
@@ -89,12 +90,12 @@ def refresh(frame):
 				rij[i][j] = r_next[i] - r_next[j]
 				if rij[i][j][0]**2 + rij[i][j][1]**2 <= D**2:
 					rij[i][j] = r[i] - r[j]
-					rij_mag[i][j] = np.sqrt(rij[i][j][0]**2 + rij[i][j][1]**2)
+					rij_mag2[i][j] = rij[i][j][0]**2 + rij[i][j][1]**2
 					vij[i][j] = v[i] - v[j]
 					vij_mag[i][j] = np.sqrt(vij[i][j][0]**2 + vij[i][j][1]**2)
 					rvij[i][j] = np.dot(rij[i][j], vij[i][j])
-					b2 = rij_mag[i][j] ** 2 - (rvij[i][j] / vij_mag[i][j])**2
-					tij[i][j] = -1/vij_mag[i][j] * (rvij[i][j]/vij_mag[i][j] + (D**2 - b2**2)**(1/2))
+					b2 = rij_mag2[i][j] - (rvij[i][j] / vij_mag[i][j])**2
+					tij[i][j] = -1/vij_mag[i][j] * (rvij[i][j]/vij_mag[i][j] + (D**2 - b2)**(1/2))
 	print("Particle collisions evaluated...")
 
 	for i in range(size):
@@ -108,12 +109,10 @@ def refresh(frame):
 			ty = (y_max - D/2 - r[i][1]) / v[i][1]
 		elif r_next[i][1] <= y_min + D/2:
 			ty = (r[i][1] - y_min - D/2) / v[i][1]
-		tb[i] = min(tx, ty)
+		tb[i] = min(abs(tx), abs(ty))
 		if tb[i] == 1.7976931348623157e+308:
 			tb[i] = 0
 	print("Boundary collisions evaluated...")
-
-	print(tb)
 
 	epoch = 1.7976931348623157e+308-1
 	for i in range(size):
@@ -144,11 +143,19 @@ def refresh(frame):
 			if r[index_1][1] >= y_max - D/2 or r[index_1][1] <= y_min + D/2:
 				v[index_1][1] = -v[index_1][1]
 		else:
-			print("Particle collision!!!!!!!!!!!!!!!!!!!!!!!!!")
-			delta_v = -rvij[index_1][index_2]/rij_mag[index_1][index_2] * rij[index_1][index_2]
+			delta_v = -rvij[index_1][index_2]/(rij_mag2[index_1][index_2]) * rij[index_1][index_2]
 			v[index_1] = v[index_1] + delta_v
 			v[index_2] = v[index_2] - delta_v
 	print("Collision handled...")
+
+	for i in range(size):
+		OB = 0
+		if r[i][0] > x_max - D/2 or r[i][0] < x_min + D/2:
+			OB = 1
+		if r[i][1] > y_max - D/2 or r[i][1] < y_min + D/2:
+			OB = 1
+		if OB == 1:
+			print("OB!!!!!!!!!!!!!!!!!!!!!")
 
 #reset tij, r', v_next
 #progess r->r'

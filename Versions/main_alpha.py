@@ -170,10 +170,10 @@ def refresh(frame):
 		for i in range(size):
 			v_next[i] = v[i]
 			if i == index_1:
-				delta_v = -rvij[index_1][index_2]/rij_mag[index_1][index_2] * rij[index_1][index_2]
+				delta_v = -rvij[index_1][index_2]/rij_mag[index_1][index_2]**2 * rij[index_1][index_2]
 				v_next[i] = v_next[i] + delta_v
 			elif i == index_2:
-				delta_v = rvij[index_1][index_2]/rij_mag[index_1][index_2] * rij[index_1][index_2]
+				delta_v = rvij[index_1][index_2]/rij_mag[index_1][index_2]**2 * rij[index_1][index_2]
 				v_next[i] = v_next[i] + delta_v
 
 	print("Next epoch's velocity profile calculated...")
@@ -237,6 +237,6 @@ def refresh(frame):
 	ax.set_ylim([y_min,y_max])
 	ax.plot(column(r,0), column(r,1), 'ro')
 
-a = FuncAnimation(fig, refresh, frames=100000)
+a = FuncAnimation(fig, refresh, frames=100000, interval = 10)
 
 plt.show()
