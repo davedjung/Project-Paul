@@ -8,10 +8,6 @@
 
 /* Begin PBXFileReference section */
 		BCFDB2C422788E50006911A6 /* main.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = main.py; sourceTree = "<group>"; };
-		BCFDB2C622788FE4006911A6 /* main_alpha.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = main_alpha.py; path = "../../TEMP/Project Paul/Python/main_alpha.py"; sourceTree = "<group>"; };
-		BCFDB2C722788FF1006911A6 /* main_fast.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = main_fast.py; path = "../../TEMP/Project Paul/Python/main_fast.py"; sourceTree = "<group>"; };
-		BCFDB2C822788FF7006911A6 /* main_benchmark.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = main_benchmark.py; path = "../../TEMP/Project Paul/Python/main_benchmark.py"; sourceTree = "<group>"; };
-		BCFDB2CA22789018006911A6 /* Vectorization_Benchmark.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; name = Vectorization_Benchmark.py; path = "../../TEMP/Project Paul/Python/Vectorization/Vectorization_Benchmark.py"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -27,9 +23,6 @@
 		BCFDB2C522788FB5006911A6 /* Versions */ = {
 			isa = PBXGroup;
 			children = (
-				BCFDB2C622788FE4006911A6 /* main_alpha.py */,
-				BCFDB2C722788FF1006911A6 /* main_fast.py */,
-				BCFDB2C822788FF7006911A6 /* main_benchmark.py */,
 			);
 			path = Versions;
 			sourceTree = "<group>";
@@ -37,7 +30,6 @@
 		BCFDB2C922789004006911A6 /* Vectorization */ = {
 			isa = PBXGroup;
 			children = (
-				BCFDB2CA22789018006911A6 /* Vectorization_Benchmark.py */,
 			);
 			path = Vectorization;
 			sourceTree = "<group>";
