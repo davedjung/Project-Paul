@@ -198,7 +198,7 @@ def refresh(frame):
 		y[i+1] = v_dist[i] / size
 	ax2.clear()
 	ax2.set_xlim(0,max(x))
-	ax2.set_ylim(0,0.25)
+	ax2.set_ylim(0,max(y)*1.1)
 	y_boltzmann = np.zeros(resolution+1)
 	B = np.sqrt(2/np.pi) * (2*v2_avg)**(-3/2)
 	for i in range(resolution+1):
