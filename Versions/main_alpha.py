@@ -237,6 +237,6 @@ def refresh(frame):
 	ax.set_ylim([y_min,y_max])
 	ax.plot(column(r,0), column(r,1), 'ro')
 
-a = FuncAnimation(fig, refresh, frames=100000, interval = 10)
+a = FuncAnimation(fig, refresh, frames=100000)
 
 plt.show()

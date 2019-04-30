@@ -22,7 +22,7 @@ x_max = 10 #container boundary
 x_min = -10
 y_max = 10
 y_min = -10
-tick = 0.01 #time scale
+tick = 0.1 #time scale
 epoch = 0 #time until next collision
 resolution = 30 #resolution of distribution graph
 
