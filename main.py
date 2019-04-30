@@ -24,7 +24,7 @@ y_max = 10
 y_min = -10
 tick = 0.01 #time scale
 epoch = 0 #time until next collision
-#resolution = 20 #resolution of distribution graph
+resolution = 30 #resolution of distribution graph
 
 #declarations
 
@@ -32,7 +32,8 @@ r = np.zeros((size,2))
 r_next = np.zeros((size,2))
 rij = np.zeros(((size,size,2)))
 rij_mag2 = np.zeros((size,size))
-v = np.zeros((size,2))
+v = np.zeros((size,2), dtype = np.float32)
+v_mag = np.zeros(size, dtype = np.float32)
 vij = np.zeros(((size,size,2)))
 vij_mag = np.zeros((size,size))
 rvij = np.zeros((size,size))
@@ -44,8 +45,7 @@ y_collision = 0
 particle_collision = 0
 index_1 = 0
 index_2 = -1
-
-KE = 0
+v2_avg = 0
 
 #initialization
 for i in range(size):
@@ -55,12 +55,18 @@ for i in range(size):
 for i in range(size):
     v[i,0] = np.random.rand()*10 - 5
     v[i,1] = np.random.rand()*10 - 5
+    v2_avg = v2_avg + v[i][0]**2 + v[i][1]**2
+
+v2_avg = v2_avg / size
 
 fig = plt.figure()
 ax = fig.add_axes()
 ax = plt.axes()
 ax.set_xlim([x_min,x_max])
 ax.set_ylim([y_min,y_max])
+
+graph = plt.figure()
+ax2 = graph.add_subplot(111)
 
 print("Initial setup complete...")
 
@@ -148,28 +154,35 @@ def refresh(frame):
 			v[index_2] = v[index_2] - delta_v
 	print("Collision handled...")
 
+#Maxwell-Boltzmann distribution
+	v_max = -1
+	v_min = 0
+	v_mag = mag_cpu(column(v,0), column(v,1))
 	for i in range(size):
-		OB = 0
-		if r[i][0] > x_max - D/2 or r[i][0] < x_min + D/2:
-			OB = 1
-		if r[i][1] > y_max - D/2 or r[i][1] < y_min + D/2:
-			OB = 1
-		if OB == 1:
-			print("OB!!!!!!!!!!!!!!!!!!!!!")
-
-#reset tij, r', v_next
-#progess r->r'
-#check overlapping: determine tij (somehow)
-#	we know i, j, tick
-#	use r, v to calculate tij???
-#find the lowest tij
-#if lowest = 0 (no collision):
-#	r = r'
-#else:
-#	rewind!!!
-#	progress r->r' for epoch = tij_lowest
-#	compute v_next for i,j
-#	update v_next -> v
+		if v_mag[i] >= v_max:
+			v_max = v_mag[i]
+	v_dist = np.zeros(resolution)
+	v_max = v_max * 1.2
+	step = (v_max - v_min) / resolution
+	#print("v_max: ", v_max)
+	#print("v_mag: ", v_mag)
+	for i in range(resolution):
+		count = 0
+		#print("Lower bound: ", step * i)
+		#print("Upper bound: ", step * (i+1))
+		for j in range(size):
+			if v_mag[j] >= step * i and v_mag[j] < step * (i+1):
+				count = count + 1
+		#print("Count: ", count)
+		v_dist[i] = count
+	print("Distribution calculated...")
+	print(v_dist)
+	f= open("distribution.txt","w+")
+	for i in range(resolution):
+		output = str(v_dist[i])
+		f.write(output)
+		f.write(" ")
+	f.close()
 
 	#graphics
 	ax.clear()
@@ -177,6 +190,22 @@ def refresh(frame):
 	ax.set_ylim([y_min,y_max])
 	ax.plot(column(r,0), column(r,1), 'ro')
 
-a = FuncAnimation(fig, refresh, frames=100000, interval=10)
+	x = np.zeros(resolution+1)
+	for i in range(resolution):
+		x[i+1] = (step * i + step * (i+1)) / 2
+	y = np.zeros(resolution+1)
+	for i in range(resolution):
+		y[i+1] = v_dist[i] / size
+	ax2.clear()
+	ax2.set_xlim(0,max(x))
+	ax2.set_ylim(0,0.25)
+	y_boltzmann = np.zeros(resolution+1)
+	B = np.sqrt(2/np.pi) * (2*v2_avg)**(-3/2)
+	for i in range(resolution+1):
+		y_boltzmann[i] = B * x[i]**2 * np.exp(-1 * x[i]**2 / v2_avg) * step
+	#ax2.plot(x, y, 'r', x, y_boltzmann, 'b')
+	ax2.plot(x,y)
 
+a = FuncAnimation(fig, refresh, frames=100000, interval=10)
+b = FuncAnimation(graph, refresh, frames=100000, interval=10)
 plt.show()
