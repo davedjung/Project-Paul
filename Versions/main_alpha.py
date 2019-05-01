@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib.path as path
 from matplotlib.animation import FuncAnimation
+from timeit import default_timer as timer
 
 def column(array, i):
 	return [row[i] for row in array]
@@ -56,6 +57,7 @@ ax.set_xlim([x_min,x_max])
 ax.set_ylim([y_min,y_max])
 
 def refresh(frame):
+	start = timer()
 	global generation
 	print("Generation #: ", generation)
 #reset time-sensitive parameters--------------
@@ -198,7 +200,10 @@ def refresh(frame):
 		#time_absolute = time_absolute + epoch
 
 	print("Particles moved...")
-
+	
+	lifetime = timer() - start
+	print("Generation time : " , lifetime)
+	
 #Maxwell-Boltzmann distribution
 	v_max = -1
 	v_min = 0
