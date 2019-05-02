@@ -7,6 +7,7 @@ import matplotlib.path as path
 from matplotlib.animation import FuncAnimation
 from timeit import default_timer as timer
 from numba import vectorize
+import multiprocessing as mp
 
 @vectorize(['float32(float32, float32)'], target='cpu')
 def mag_cpu(a, b):
@@ -24,7 +25,7 @@ y_max = 10
 y_min = -10
 tick = 0.01 #time scale
 epoch = 0 #time until next collision
-resolution = 30 #resolution of distribution graph
+resolution = int(size / 5) #resolution of distribution graph
 temperature_scale = int(input("Temperature scale: "))
 #declarations
 
@@ -53,8 +54,8 @@ for i in range(size):
 	r[i,1] = np.random.rand() * (y_max-y_min)/1.1 - (y_max-y_min)/2.2
 
 for i in range(size):
-    v[i,0] = (np.random.rand()*10 - 5) * temperature_scale
-    v[i,1] = (np.random.rand()*10 - 5) * temperature_scale
+    v[i,0] = (np.random.rand() * 2 - 1) * temperature_scale
+    v[i,1] = (np.random.rand() * 2 - 1) * temperature_scale
     v2_avg = v2_avg + v[i][0]**2 + v[i][1]**2
 
 v2_avg = v2_avg / size
@@ -72,6 +73,26 @@ print("Initial setup complete...")
 
 #simulation starts from here...
 
+def collisionDetection(x):
+		global tij
+		global complexity
+		for i in range(x, x+int(size/8)):
+			for j in range(size):
+				global tij
+				if i<=j:
+					break
+				else:
+					rij[i][j] = r_next[i] - r_next[j]
+					if rij[i][j][0]**2 + rij[i][j][1]**2 <= D**2:
+						complexity += 1
+						rij[i][j] = r[i] - r[j]
+						rij_mag2[i][j] = rij[i][j][0]**2 + rij[i][j][1]**2
+						vij[i][j] = v[i] - v[j]
+						vij_mag[i][j] = np.sqrt(vij[i][j][0]**2 + vij[i][j][1]**2)
+						rvij[i][j] = np.dot(rij[i][j], vij[i][j])
+						b2 = rij_mag2[i][j] - (rvij[i][j] / vij_mag[i][j])**2
+						tij[i][j] = -1/vij_mag[i][j] * (rvij[i][j]/vij_mag[i][j] + (D**2 - b2)**(1/2))
+		
 
 def refresh(frame):
 	global tij
@@ -92,12 +113,8 @@ def refresh(frame):
 #check if collision occurs in this tick--------
 	global complexity
 	complexity = 0
-	def collisionDetection(x1,x2,y1,y2):
-		global tij
-		global complexity
-		for i in range(x1,x2):
-			for j in range(y1,y2):
-				global tij
+	for i in range(size):
+			for j in range(size):
 				if i<=j:
 					break
 				else:
@@ -111,7 +128,6 @@ def refresh(frame):
 						rvij[i][j] = np.dot(rij[i][j], vij[i][j])
 						b2 = rij_mag2[i][j] - (rvij[i][j] / vij_mag[i][j])**2
 						tij[i][j] = -1/vij_mag[i][j] * (rvij[i][j]/vij_mag[i][j] + (D**2 - b2)**(1/2))
-	collisionDetection(0,size,0,size)
 	print("Particle collisions evaluated...")
 	print("Complexity: ", complexity)
 	for i in range(size):
@@ -170,7 +186,8 @@ def refresh(frame):
 #Maxwell-Boltzmann distribution
 	v_max = -1
 	v_min = 0
-	v_mag = mag_cpu(column(v,0), column(v,1))
+	for i in range(size):
+		v_mag[i] = np.sqrt(v[i][0]**2 + v[i][1]**2)
 	for i in range(size):
 		if v_mag[i] >= v_max:
 			v_max = v_mag[i]
@@ -209,15 +226,16 @@ def refresh(frame):
 	y = np.zeros(resolution+1)
 	for i in range(resolution):
 		y[i+1] = v_dist[i] / size
+
+	y_boltzmann = np.zeros(resolution+1)
+	B = 2 / v2_avg
+	for i in range(resolution+1):
+		y_boltzmann[i] = B * x[i] * np.exp(-1 * x[i]**2 / v2_avg) * step
 	ax2.clear()
 	ax2.set_xlim(0,max(x))
 	ax2.set_ylim(0,max(y)*1.1)
-	y_boltzmann = np.zeros(resolution+1)
-	B = np.sqrt(2/np.pi) * (2*v2_avg)**(-3/2)
-	for i in range(resolution+1):
-		y_boltzmann[i] = B * x[i]**2 * np.exp(-1 * x[i]**2 / v2_avg) * step
-	#ax2.plot(x, y, 'r', x, y_boltzmann, 'b')
-	ax2.plot(x,y)
+	ax2.plot(x, y, 'r', x, y_boltzmann, 'b')
+	#ax2.plot(x,y)
 
 a = FuncAnimation(fig, refresh, frames=100000, interval=1)
 b = FuncAnimation(graph, refresh, frames=100000, interval=1)

@@ -85,15 +85,16 @@ for eon in range(10):
 				break
 			else:
 				rij[i][j] = r_next[i] - r_next[j]
-				if rij[i][j][0]**2 + rij[i][j][1]**2 <= D**2:
-					complexity += 1
-					rij[i][j] = r[i] - r[j]
-					rij_mag2[i][j] = rij[i][j][0]**2 + rij[i][j][1]**2
-					vij[i][j] = v[i] - v[j]
-					vij_mag[i][j] = np.sqrt(vij[i][j][0]**2 + vij[i][j][1]**2)
-					rvij[i][j] = np.dot(rij[i][j], vij[i][j])
-					b2 = rij_mag2[i][j] - (rvij[i][j] / vij_mag[i][j])**2
-					tij[i][j] = -1/vij_mag[i][j] * (rvij[i][j]/vij_mag[i][j] + (D**2 - b2)**(1/2))
+				if rij[i][j][0] <= D and rij[i][j][1] <= D:
+					if rij[i][j][0]**2 + rij[i][j][1]**2 <= D**2:
+						complexity += 1
+						rij[i][j] = r[i] - r[j]
+						rij_mag2[i][j] = rij[i][j][0]**2 + rij[i][j][1]**2
+						vij[i][j] = v[i] - v[j]
+						vij_mag[i][j] = np.sqrt(vij[i][j][0]**2 + vij[i][j][1]**2)
+						rvij[i][j] = np.dot(rij[i][j], vij[i][j])
+						b2 = rij_mag2[i][j] - (rvij[i][j] / vij_mag[i][j])**2
+						tij[i][j] = -1/vij_mag[i][j] * (rvij[i][j]/vij_mag[i][j] + (D**2 - b2)**(1/2))
 	lifetime = timer() - start
 	print("Particle collisions evaluated...: ", lifetime)
 	print("Complexity: ", complexity)
