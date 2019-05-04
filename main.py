@@ -132,12 +132,12 @@ def refresh(frame):
 		v_dist[i] = count
 	print("Distribution calculated...")
 	#print(v_dist)
-	f= open("distribution.txt","w+")
-	for i in range(resolution):
-		output = str(v_dist[i])
-		f.write(output)
-		f.write(" ")
-	f.close()
+	#f= open("distribution.txt","w+")
+	#for i in range(resolution):
+	#	output = str(v_dist[i])
+	#	f.write(output)
+	#	f.write(" ")
+	#f.close()
 
 	#graphics
 	ax.clear()
