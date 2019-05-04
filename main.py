@@ -18,35 +18,26 @@ def column(array, i):
 
 #configuration
 size = int(input("Number of particles: "))
-D = 0.5 #particle diameter
-x_max = 10 #container boundary
-x_min = -10
-y_max = 10
-y_min = -10
-tick = 0.01 #time scale
-epoch = 0 #time until next collision
-resolution = int(size / 5) #resolution of distribution graph
+D = 3 #particle diameter
+x_max = 100 #container boundary
+x_min = -100
+y_max = 100
+y_min = -100
+tick = 0.1 #time scale
+resolution = 80 #resolution of distribution graph
 temperature_scale = int(input("Temperature scale: "))
-#declarations
 
+#declarations
 r = np.zeros((size,2))
-r_next = np.zeros((size,2))
 rij = np.zeros(((size,size,2)))
 rij_mag2 = np.zeros((size,size))
 v = np.zeros((size,2), dtype = np.float32)
-v_mag = np.zeros(size, dtype = np.float32)
+v_mag = np.zeros(size)
 vij = np.zeros(((size,size,2)))
-vij_mag = np.zeros((size,size))
-rvij = np.zeros((size,size))
-tij = np.zeros((size,size))
-tbi = np.zeros(size)
-container_collision = 0
-x_collision = 0
-y_collision = 0
-particle_collision = 0
-index_1 = 0
-index_2 = -1
 v2_avg = 0
+
+def mod(v):
+    return np.sum(v * v, axis=-1)
 
 #initialization
 for i in range(size):
@@ -54,9 +45,13 @@ for i in range(size):
 	r[i,1] = np.random.rand() * (y_max-y_min)/1.1 - (y_max-y_min)/2.2
 
 for i in range(size):
-    v[i,0] = (np.random.rand() * 2 - 1) * temperature_scale
-    v[i,1] = (np.random.rand() * 2 - 1) * temperature_scale
-    v2_avg = v2_avg + v[i][0]**2 + v[i][1]**2
+	if i%2==0:
+		v[i,0] = temperature_scale
+		v[i,1] = temperature_scale
+	else:
+		v[i,0] = -temperature_scale
+		v[i,1] = -temperature_scale
+	v2_avg = v2_avg + v[i][0]**2 + v[i][1]**2
 
 v2_avg = v2_avg / size
 
@@ -73,112 +68,49 @@ print("Initial setup complete...")
 
 #simulation starts from here...
 
-def collisionDetection(x):
-		global tij
-		global complexity
-		for i in range(x, x+int(size/8)):
-			for j in range(size):
-				global tij
-				if i<=j:
-					break
-				else:
-					rij[i][j] = r_next[i] - r_next[j]
-					if rij[i][j][0]**2 + rij[i][j][1]**2 <= D**2:
-						complexity += 1
-						rij[i][j] = r[i] - r[j]
-						rij_mag2[i][j] = rij[i][j][0]**2 + rij[i][j][1]**2
-						vij[i][j] = v[i] - v[j]
-						vij_mag[i][j] = np.sqrt(vij[i][j][0]**2 + vij[i][j][1]**2)
-						rvij[i][j] = np.dot(rij[i][j], vij[i][j])
-						b2 = rij_mag2[i][j] - (rvij[i][j] / vij_mag[i][j])**2
-						tij[i][j] = -1/vij_mag[i][j] * (rvij[i][j]/vij_mag[i][j] + (D**2 - b2)**(1/2))
-		
 
 def refresh(frame):
-	global tij
 	start = timer()
-	tij = np.zeros((size,size))
 	tb = np.zeros(size)
 	container_collision = 0
-	particle_collision = 0
-	rij = np.zeros(((size,size,2)))
 	global r
-	global r_next
 	global v
 	
 #progress-------------------------------------
 	for i in range(size):
-		r_next[i] = r[i] + v[i] * tick
+		r[i] = r[i] + v[i] * tick
 	print("Particles moved...")
+
 #check if collision occurs in this tick--------
-	global complexity
-	complexity = 0
-	for i in range(size):
-			for j in range(size):
-				if i<=j:
-					break
-				else:
-					rij[i][j] = r_next[i] - r_next[j]
-					if rij[i][j][0]**2 + rij[i][j][1]**2 <= D**2:
-						complexity += 1
-						rij[i][j] = r[i] - r[j]
-						rij_mag2[i][j] = rij[i][j][0]**2 + rij[i][j][1]**2
-						vij[i][j] = v[i] - v[j]
-						vij_mag[i][j] = np.sqrt(vij[i][j][0]**2 + vij[i][j][1]**2)
-						rvij[i][j] = np.dot(rij[i][j], vij[i][j])
-						b2 = rij_mag2[i][j] - (rvij[i][j] / vij_mag[i][j])**2
-						tij[i][j] = -1/vij_mag[i][j] * (rvij[i][j]/vij_mag[i][j] + (D**2 - b2)**(1/2))
+
+	dists = np.sqrt(mod(r - r[:,np.newaxis]))
+	cols2 = (0 < dists) & (dists < D)
+	idx_i, idx_j = np.nonzero(cols2)
+	for i, j in zip(idx_i, idx_j):
+		if j < i:
+			continue
+
+		rij = r[i] - r[j]
+		d = mod(rij)
+		vij = v[i] - v[j]
+		dv = np.dot(vij, rij) * rij / d
+		v[i] -= dv
+		v[j] += dv
+
+		r[i] += tick * v[i]
+		r[j] += tick * v[j]
+
 	print("Particle collisions evaluated...")
-	print("Complexity: ", complexity)
 	for i in range(size):
-		tx = 1.7976931348623157e+308
-		ty = 1.7976931348623157e+308
-		if r_next[i][0] >= x_max - D/2:
-			tx = (x_max - D/2 - r[i][0]) / v[i][0]
-		elif r_next[i][0] <= x_min + D/2:
-			tx = (r[i][0] - x_min - D/2) / v[i][0]
-		if r_next[i][1] >= y_max - D/2:
-			ty = (y_max - D/2 - r[i][1]) / v[i][1]
-		elif r_next[i][1] <= y_min + D/2:
-			ty = (r[i][1] - y_min - D/2) / v[i][1]
-		tb[i] = min(abs(tx), abs(ty))
-		if tb[i] == 1.7976931348623157e+308:
-			tb[i] = 0
+		if r[i][0] >= x_max - D/2:
+			v[i][0] = -v[i][0]
+		elif r[i][0] <= x_min + D/2:
+			v[i][0] = -v[i][0]
+		if r[i][1] >= y_max - D/2:
+			v[i][1] = -v[i][1]
+		elif r[i][1] <= y_min + D/2:
+			v[i][1] = -v[i][1]
 	print("Boundary collisions evaluated...")
-
-	epoch = 1.7976931348623157e+308-1
-	for i in range(size):
-		if tb[i] > 0 and epoch >= tb[i]:
-			container_collision = 1
-			index_1 = i
-			epoch = tb[i]
-
-	for i in range(size):
-		for j in range(size):
-			if tij[i][j] > 0 and epoch >= tij[i][j]:
-				particle_collision = 1
-				container_collision = 0
-				index_1 = i
-				index_2 = j
-				epoch = tij[i][j]
-	print("Closest collision found...")
-
-	if epoch >= tick:
-		for i in range(size):
-			r[i] = r_next[i]
-	else:
-		for i in range(size):
-			r[i] = r[i] + v[i] * epoch
-		if container_collision == 1:
-			if r[index_1][0] >= x_max - D/2 or r[index_1][0] <= x_min + D/2:
-				v[index_1][0] = -v[index_1][0]
-			if r[index_1][1] >= y_max - D/2 or r[index_1][1] <= y_min + D/2:
-				v[index_1][1] = -v[index_1][1]
-		else:
-			delta_v = -rvij[index_1][index_2]/(rij_mag2[index_1][index_2]) * rij[index_1][index_2]
-			v[index_1] = v[index_1] + delta_v
-			v[index_2] = v[index_2] - delta_v
-	print("Collision handled...")
 
 	lifetime = timer() - start
 	print("Generation time : " , lifetime)
@@ -218,8 +150,8 @@ def refresh(frame):
 	ax.clear()
 	ax.set_xlim([x_min,x_max])
 	ax.set_ylim([y_min,y_max])
-	ax.plot(column(r,0), column(r,1), 'ro')
-
+	ax.plot(column(r,0), column(r,1), 'ro', markersize = 3)
+	
 	x = np.zeros(resolution+1)
 	for i in range(resolution):
 		x[i+1] = (step * i + step * (i+1)) / 2
@@ -233,10 +165,11 @@ def refresh(frame):
 		y_boltzmann[i] = B * x[i] * np.exp(-1 * x[i]**2 / v2_avg) * step
 	ax2.clear()
 	ax2.set_xlim(0,max(x))
-	ax2.set_ylim(0,max(y)*1.1)
+	ax2.set_ylim(0,max(y_boltzmann)*1.1)
 	ax2.plot(x, y, 'r', x, y_boltzmann, 'b')
 	#ax2.plot(x,y)
 
 a = FuncAnimation(fig, refresh, frames=100000, interval=1)
 b = FuncAnimation(graph, refresh, frames=100000, interval=1)
 plt.show()
+
