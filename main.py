@@ -42,7 +42,7 @@ index = -5
 for i in range(size):
 	v[i][0] = temperature_scale * index / 3
 	v[i][1] = temperature_scale * index / 3
-	index = index + 1
+	index = index + 0.5
 	if index == 6:
 		index = -5
 	v2_avg = v2_avg + v[i][0]**2 + v[i][1]**2
