@@ -10,6 +10,9 @@ from timeit import default_timer as timer
 def column(array, i):
 	return [row[i] for row in array]
 
+print("Maxwell-Boltzmann Distribution Simulation version 0.1")
+print("Created by Jung Min Ki")
+
 #configuration
 size = int(input("Number of particles: "))
 D = 0.5 #particle diameter

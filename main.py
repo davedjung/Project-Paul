@@ -10,6 +10,9 @@ from timeit import default_timer as timer
 def column(array, i):
 	return [row[i] for row in array]
 
+print("Maxwell-Boltzmann Distribution Simulation version 0.4")
+print("Created by Jung Min Ki")
+
 #configuration
 size = int(input("Number of particles: "))
 D = 0.1 #particle diameter
@@ -143,7 +146,7 @@ def refresh(frame):
 	ax.clear()
 	ax.set_xlim([x_min,x_max])
 	ax.set_ylim([y_min,y_max])
-	ax.plot(column(r,0), column(r,1), 'ro', markersize = 3)
+	ax.plot(column(r,0), column(r,1), 'ro', markersize = 3, color='royalblue')
 	
 	x = np.zeros(resolution+1)
 	for i in range(resolution):
