@@ -175,6 +175,7 @@ def refresh(frame):
 	rects = ax_graph.bar(x_dist + resolution*0.1, y_dist, width - resolution*0.2, color='IndianRed')
 	print("generation time: ", timer()-start)
 	age += 1
-
+	plt.pause(0.0001)
+	
 a = FuncAnimation(fig, refresh, frames=100000, interval=1)
 plt.show()
