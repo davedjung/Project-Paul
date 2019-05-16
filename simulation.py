@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 print("Maxwell-Boltzmann Distribution Simulation version 0.5")
 print("Created by Jung Min Ki")
+def mod(v):
+    return np.sum(v * v, axis=-1)
 
 #configuration
 size = int(input("Number of particles : "))
@@ -60,35 +62,35 @@ def refresh(frame):
 	start = timer()
 	
 	if mode == 1:
-		#collision detection
-		rij = r.reshape(size,1,2) - r
-		r2ij = (rij ** 2).sum(2)
-		vij = v.reshape(size,1,2) - v
-		rvij = rij[:,:,0]*vij[:,:,0] + rij[:,:,1]*vij[:,:,1]
-	
-		det = r2ij - D**2
-		det[det<0] = 0
-		index_i, index_j = np.nonzero(det)
-		print("time: ", timer()-start)
-
-		for i, j in zip(index_i, index_j):
+		for i in range(size):
+			r[i] = r[i] + v[i] * tick
+		dists = np.sqrt(mod(r - r[:,np.newaxis]))
+		cols2 = (0 < dists) & (dists < D)
+		idx_i, idx_j = np.nonzero(cols2)
+		for i, j in zip(idx_i, idx_j):
 			if j < i:
 				continue
-			delta_v = -rvij[i][j]/(r2ij[i][j]) * rij[i][j]
-			v[i] += delta_v
-			v[j] -= delta_v
-			
-		r = r + v * tick
-		print("time: ", timer()-start)
 
-		#boundary collision
-		v[r[:,0]>dimension_x-D/2] *= -1
-		v[r[:,0]<-dimension_x+D/2] *= -1
-		v[r[:,1]>dimension_y-D/2] *= -1
-		v[r[:,1]<-dimension_y+D/2] *= -1
+			rij = r[i] - r[j]
+			d = mod(rij)
+			vij = v[i] - v[j]
+			dv = np.dot(vij, rij) * rij / d
+			v[i] -= dv
+			v[j] += dv
 
-		print("done!!")
-		print("time: ", timer()-start)
+			r[i] += tick * v[i]
+			r[j] += tick * v[j]
+
+		for i in range(size):
+			if r[i][0] >= dimension_x - D/2:
+				v[i][0] = -v[i][0]
+			elif r[i][0] <= -dimension_x + D/2:
+				v[i][0] = -v[i][0]
+			if r[i][1] >= dimension_y - D/2:
+				v[i][1] = -v[i][1]
+			elif r[i][1] <= -dimension_y + D/2:
+				v[i][1] = -v[i][1]
+
 	else:
 		#collision detection
 		rij = r.reshape(size,1,2) - r
@@ -153,7 +155,7 @@ def refresh(frame):
 	
 	#compute speed distribution
 	v_mag = np.sqrt(v[:,0]**2 + v[:,1]**2)
-	v_max = np.amax(v_mag)
+	#v_max = np.amax(v_mag)
 	x_dist = np.arange(0,v_max*2, resolution)
 	dist = np.histogram(v_mag, bins=x_dist)
 	y_dist = dist[0] / size
