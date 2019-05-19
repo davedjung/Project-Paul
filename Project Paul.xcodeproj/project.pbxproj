@@ -11,6 +11,7 @@
 		BCAAF82F227915F0006FEB03 /* benchmark_alpha.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = benchmark_alpha.py; sourceTree = "<group>"; };
 		BCAAF8302279184D006FEB03 /* benchmark_beta.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = benchmark_beta.py; sourceTree = "<group>"; };
 		BCAFBE16227DA699001B87F4 /* main_delta.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = main_delta.py; sourceTree = "<group>"; };
+		BCDF17502291756800EB899D /* test.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = test.py; sourceTree = "<group>"; };
 		BCED2B852279415000FDC175 /* main_gamma.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = main_gamma.py; sourceTree = "<group>"; };
 		BCFDB2C422788E50006911A6 /* main_beta.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = main_beta.py; sourceTree = "<group>"; };
 		BCFDB2CB22789181006911A6 /* Vectorization_Benchmark.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = Vectorization_Benchmark.py; sourceTree = "<group>"; };
@@ -21,6 +22,7 @@
 		BCFDB2BD22788E0F006911A6 = {
 			isa = PBXGroup;
 			children = (
+				BCDF17502291756800EB899D /* test.py */,
 				BC8F69FF2286FF5800628279 /* simulation.py */,
 				BCFDB2C922789004006911A6 /* Vectorization */,
 				BCFDB2C522788FB5006911A6 /* Versions */,

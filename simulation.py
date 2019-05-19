@@ -27,8 +27,8 @@ resolution = 0.1 #resolution of distribution
 
 #initialization
 start = timer()
-rx = (np.random.random(size) - 0.5) * dimension_x
-ry = (np.random.random(size) - 0.5) * dimension_y
+rx = (np.random.random(size) - 0.5) * dimension_x * 1.95
+ry = (np.random.random(size) - 0.5) * dimension_y * 1.95
 r = np.append(rx, ry)
 r.shape = (size, 2)
 v = (np.random.random((size,2)) - 0.5) * temperature_scale * 2
