@@ -18,7 +18,7 @@ if mode == 1:
 	mode = 1
 else:
 	mode = 0
-D = 0.01 #particle diameter
+D = 0.05 #particle diameter
 dimension_x = 10 #dimensions of container
 dimension_y = 10
 tick = 0.1 #time scale for performance mode

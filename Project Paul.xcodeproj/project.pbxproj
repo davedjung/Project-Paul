@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXFileReference section */
+		BC710E212292E44B00F6AF6F /* logger.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = logger.py; sourceTree = "<group>"; };
+		BC710E222292E55600F6AF6F /* time_machine.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = time_machine.py; sourceTree = "<group>"; };
 		BC8F69FF2286FF5800628279 /* simulation.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = simulation.py; sourceTree = "<group>"; };
 		BCAAF82F227915F0006FEB03 /* benchmark_alpha.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = benchmark_alpha.py; sourceTree = "<group>"; };
 		BCAAF8302279184D006FEB03 /* benchmark_beta.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = benchmark_beta.py; sourceTree = "<group>"; };
@@ -24,6 +26,8 @@
 			children = (
 				BCDF17502291756800EB899D /* test.py */,
 				BC8F69FF2286FF5800628279 /* simulation.py */,
+				BC710E212292E44B00F6AF6F /* logger.py */,
+				BC710E222292E55600F6AF6F /* time_machine.py */,
 				BCFDB2C922789004006911A6 /* Vectorization */,
 				BCFDB2C522788FB5006911A6 /* Versions */,
 			);
