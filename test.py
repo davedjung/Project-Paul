@@ -3,7 +3,7 @@ import numpy as np
 from timeit import default_timer as timer
 
 
-size = 1000
+size = 10000
 
 rx = (np.random.random(size) - 0.5) * 10 * 1.95
 ry = (np.random.random(size) - 0.5) * 10 * 1.95

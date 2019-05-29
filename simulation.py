@@ -160,20 +160,22 @@ def refresh(frame):
 	dist = np.histogram(v_mag, bins=x_dist)
 	y_dist = dist[0] / size
 	y_dist = np.append(np.zeros(1), y_dist)
-	print("time: ", timer()-start)
+	print("computation time: ", timer()-start)
 	#graphics
+	start = timer()
 	ax_box.clear()
 	ax_box.set_xlim([-dimension_x,dimension_x])
 	ax_box.set_ylim([-dimension_y,dimension_y])
 	ax_box.plot(r[:,0], r[:,1], 'ro', markersize = 3, color='royalblue')
-	
+	print("particle graphics time: ", timer()-start)
+	start = timer()
 	ax_graph.clear()
 	ax_graph.set_xlim([0, v_max*2])
 	ax_graph.set_ylim([0, np.amax(y_MB)*1.5])
 	ax_graph.plot(x_MB,y_MB, 'b')
 	width = resolution
 	rects = ax_graph.bar(x_dist + resolution*0.1, y_dist, width - resolution*0.2, color='IndianRed')
-	print("generation time: ", timer()-start)
+	print("histogram graphics time: ", timer()-start)
 	age += 1
 	plt.pause(0.0001)
 	
