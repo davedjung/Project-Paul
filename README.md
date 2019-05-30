@@ -21,8 +21,8 @@ If you have no experience with Python, download the entire **Release** folder an
 1. The first parameter that needs to be specified is the number of particles to simulate. Ideally, that number is a positive integer (around **1000** particles are recommended).
 2. The second parameter is dubbed "Temperature Scale," even though technically it is not. This so-called scale determines the initial velocity distribution, which is related to the temperature of the system. This can be any positive value (For optimal effects, input value of **2** is recommended).
 3. The third parameter specifies the mode of computation; that is, whether to prioritize accuracy or speed.
-   - **Mode 0** is physically accurate, but is quite slow (Even though it is approximately 100 times faster than version alpha).
-   - **Mode 1** is also physically accurate when handling each collision, but ignores some collisions completely. However, the results are still valid.
+   - **Mode 0** is physically accurate, but is quite slow (Even though it is approximately 100 times faster than version alpha). It prioritizes **precision**.
+   - **Mode 1** is also physically accurate when handling each collision, but ignores some collisions completely. However, the results are still valid. It prioritizes **performance**.
 
 ## Links to YouTube videos
 
