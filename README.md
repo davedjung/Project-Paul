@@ -29,7 +29,7 @@ If you have no experience with Python, download the entire **Release** folder an
 1. Precision Mode https://youtu.be/DsA8kGd44UA<br />
 Number of particles: 1000<br />
 Temperature scale: 2<br />
-100x faster than version alpha, but real-time simulation is still unattainable. Time-lapse video of 12-hour-long screen capture.
+100x faster than version alpha, but real-time simulation is still unattainable. Time-lapse video of 12-hour-long screen capture footage.
 
 2. Performance Mode https://youtu.be/DsA8kGd44UA<br />
 Number of particles: 1000<br />
