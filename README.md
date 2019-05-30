@@ -2,6 +2,8 @@
 
 created by Jung Min Ki
 
+![GUI screenshot](https://github.com/davedjung/Project-Paul/blob/master/Misc/GUI.png)
+
 ## Introduction
 
 Project Paul is essentially a particle simulation designed for the sole purpose of experimentally verifying the Maxwell-Boltzmann distribution.<br />
