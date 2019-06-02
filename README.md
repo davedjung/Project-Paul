@@ -12,7 +12,7 @@ Project Paul is essentially a particle simulation designed for the sole purpose 
 
 ### I. Run the simulation
 
-If you have any experience in coding in Python, you could just simply run **simulation.py**. You will need to install these packages [It is recommended to use **pip** to install these packages]:
+If you have any experience in coding in Python, you could just simply run **simulation.py**. 64-bit version of Python is highly recommended. You will need to install these packages [It is recommended to use **pip** to install these packages]:
 1. NumPy (to learn more about NumPy, visit: https://www.numpy.org/)
 2. Matplotlib (to learn more about Matplotlib, visit: https://matplotlib.org/)
 
